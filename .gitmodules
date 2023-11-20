@@ -1,0 +1,6 @@
+[submodule "src/lib/ocl"]
+	path = src/lib/ocl
+	url = git@github.com:Ornsolot/OCL.git
+[submodule "src/lib/ocml"]
+	path = src/lib/ocml
+	url = git@github.com:Ornsolot/OCML.git
