@@ -1,6 +1,8 @@
 # Punto
 
 This is a Punto Game made in C with OCML (based on OCL & CSFML) librairies.
+You must use a debian based Linux distro for anything here to work has is.
+You technically can use it on Window / mac but i'm unsure of the steps to follow to set it up cotrrectly.
 
 ## SETUP
 
