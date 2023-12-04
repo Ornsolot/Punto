@@ -64,10 +64,11 @@ MAKEFLAGS	+= --no-print-directory
 re: clean all
 
 db:
-	@-docker rm -fv mongo mysql
+	@-docker rm -fv mongo mysql neo4j
 	@echo "version: '3.8'\n" > docker-compose.yml
 	
 	@echo "services:" >> docker-compose.yml
+	
 	@echo "  mongodb:" >> docker-compose.yml
 	@echo "    container_name: 'mongo'" >> docker-compose.yml
 	@echo "    build:" >> docker-compose.yml
@@ -87,9 +88,21 @@ db:
 	@echo "    volumes:" >> docker-compose.yml
 	@echo "      - mysqldata:/var/lib/mysql\n" >> docker-compose.yml
 
+	@echo "  neo4j:" >> docker-compose.yml
+	@echo "    image: neo4j:latest" >> docker-compose.yml
+	@echo "    container_name: 'neo4j'" >> docker-compose.yml
+	@echo "    ports:" >> docker-compose.yml
+	@echo "      - $(LAN):21003:7474" >> docker-compose.yml
+	@echo "      - $(LAN):21004:7687" >> docker-compose.yml
+	@echo "    environment:" >> docker-compose.yml
+	@echo "      - NEO4J_AUTH=none" >> docker-compose.yml
+	@echo "    volumes:" >> docker-compose.yml
+	@echo "      - neo4jdata:/data/\n" >> docker-compose.yml
+
 	@echo "volumes:" >> docker-compose.yml
 	@echo "  mongodata:" >> docker-compose.yml
 	@echo "  mysqldata:" >> docker-compose.yml
+	@echo "  neo4jdata:" >> docker-compose.yml
 	
 	@-docker compose up -d
 

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongodb:
+    container_name: 'mongo'
+    build:
+      dockerfile: 'data/db/mongo/Dockerfile'
+    ports:
+      - 127.0.1.1:21000:27017
+    volumes:
+      - mongodata:/data/db
+
+  mysql:
+    container_name: 'mysql'
+    build:
+      dockerfile: 'data/db/mysql/Dockerfile'
+    ports:
+      - 127.0.1.1:21001:33060
+      - 127.0.1.1:21002:3306
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  neo4j:
+    image: neo4j:latest
+    container_name: 'neo4j'
+    ports:
+      - 127.0.1.1:21003:7474
+      - 127.0.1.1:21004:7687
+    environment:
+      - NEO4J_AUTH=none
+    volumes:
+      - neo4jdata:/data/
+
+volumes:
+  mongodata:
+  mysqldata:
+  neo4jdata:
