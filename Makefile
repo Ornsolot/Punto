@@ -40,7 +40,7 @@ ELB = $(shell find $(LDR) -mindepth 1 -maxdepth 1 -not -empty -type d -printf '%
 CLN = $(addprefix clean_, $(ELB))
 PRG = $(addprefix purge_, $(ELB))
 LXT	= .a
-LIB	= $(addprefix -l, $(ELB) csfml-graphics csfml-window csfml-audio csfml-system mysqlclient sqlite3 mongoc-1.0 bson-1.0) 
+LIB	= $(addprefix -l, $(ELB) csfml-graphics csfml-window csfml-audio csfml-system mysqlclient sqlite3 mongoc-1.0 bson-1.0 neo4j-client) 
 
 #################
 ## Compilation ##
@@ -63,8 +63,7 @@ MAKEFLAGS	+= --no-print-directory
 
 re: clean all
 
-db:
-	@-docker rm -fv mongo mysql neo4j
+db: clean
 	@echo "version: '3.8'\n" > docker-compose.yml
 	
 	@echo "services:" >> docker-compose.yml
@@ -89,13 +88,15 @@ db:
 	@echo "      - mysqldata:/var/lib/mysql\n" >> docker-compose.yml
 
 	@echo "  neo4j:" >> docker-compose.yml
-	@echo "    image: neo4j:latest" >> docker-compose.yml
 	@echo "    container_name: 'neo4j'" >> docker-compose.yml
+	@echo "    build:" >> docker-compose.yml
+	@echo "      dockerfile: 'data/db/neo4j/Dockerfile'" >> docker-compose.yml
 	@echo "    ports:" >> docker-compose.yml
-	@echo "      - $(LAN):21003:7474" >> docker-compose.yml
-	@echo "      - $(LAN):21004:7687" >> docker-compose.yml
+	@echo "      - $(LAN):21003:7473" >> docker-compose.yml
+	@echo "      - $(LAN):21004:7474" >> docker-compose.yml
+	@echo "      - $(LAN):21005:7687" >> docker-compose.yml
 	@echo "    environment:" >> docker-compose.yml
-	@echo "      - NEO4J_AUTH=none" >> docker-compose.yml
+	@echo "      - NEO4J_AUTH=neo4j/secret4j" >> docker-compose.yml
 	@echo "    volumes:" >> docker-compose.yml
 	@echo "      - neo4jdata:/data/\n" >> docker-compose.yml
 
@@ -110,13 +111,13 @@ all: db $(BIN)
 
 clean: $(CLN)
 	@-docker-compose down
-	@-docker rm -fv mongo mysql
+	@-docker rm -fv mongo mysql neo4j
 	@rm -Rf $(ODR)
 
 purge: $(PRG) clean
-	@-docker rmi -f mongo mysql
+	@-docker rmi -f mongo mysql punto-neo4j
+	@-docker volume rm -f punto_neo4jdata punto_mongodata punto_mysqldata
 	@-docker system prune -af --volumes
-	@-docker volume rm punto_mongodata punto_mysqldata
 	@rm -f $(BDR)/$(BIN)$(BXT)
 
 $(BIN): $(ELB) $(OBJ)

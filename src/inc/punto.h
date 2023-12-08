@@ -15,12 +15,14 @@
 #include <mongoc/mongoc.h>
 #include <bson.h>
 
+#include <neo4j-client.h>
+
 // CHECK IF TWO SFCOLOR ARE DIFFERENT.
 #define CMPCOLOR(c1, c2) (sfColor_toInteger(c1) != sfColor_toInteger(c2))
 
 // CHECK THE TYPE OF CONNEXION
-typedef enum DATABSE { NONE = 0, MY_SQL = 1, SQLITE = 2, MONGODB = 3} db_t;
-#define DB(a) (a == NULL ? NONE : (strcmp(a, "mysql") == 0) ? MY_SQL : (strcmp(a, "sqlite") == 0) ? SQLITE : (strcmp(a, "mongodb") == 0) ? MONGODB : NONE)
+typedef enum DATABSE { NONE = 0, MY_SQL = 1, SQLITE = 2, MONGODB = 3, NEO4J = 4 } db_t;
+#define DB(a) (a == NULL ? NONE : (strcmp(a, "mysql") == 0) ? MY_SQL : (strcmp(a, "sqlite") == 0) ? SQLITE : (strcmp(a, "mongodb") == 0) ? MONGODB : (strcmp(a, "neo4j") == 0) ? NEO4J : NONE)
 
 // CHECK IF YOU CAN INSERT IN A CASE
 #define VALID(y, x, b, c, s, d) (b[y][x]->nbr < c->nbr && CMPCOLOR(b[y][x]->color, c->color) && ((x == s/2 && y == s/2) || (x == s/2-1 && y == s/2-1) || (x == s/2-1 && y == s/2) || (x == s/2 && y == s/2-1) || (x > 0 && CMPCOLOR(b[y][x-1]->color, d)) || (x < s-1 && CMPCOLOR(b[y][x+1]->color, d)) || (y > 0 && CMPCOLOR(b[y-1][x]->color, d)) || (y < s-1 && CMPCOLOR(b[y+1][x]->color, d))  || (x > 0 && y > 0 && CMPCOLOR(b[y-1][x-1]->color, d)) || (x < s-1 && y < s-1 && CMPCOLOR(b[y+1][x+1]->color, b[y][x]->color)) || (y > 0 && x < s-1 && CMPCOLOR(b[y-1][x+1]->color, d)) || (x > 0 && y < s-1 && CMPCOLOR(b[y+1][x-1]->color, d)) ))

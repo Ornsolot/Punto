@@ -1,4 +1,5 @@
 #include "punto.h"
+#include <errno.h>
 
 // MYSQL GLOBAL VARIABLE
 MYSQL *mysql = NULL;
@@ -8,10 +9,18 @@ sqlite3 *sqlite = NULL;
 mongoc_client_t *mongodb = NULL;
 mongoc_collection_t *highscore = NULL;
 mongoc_collection_t *event = NULL;
+// NEO4J GLOBAL VARIABLE
+neo4j_connection_t *neo4j = NULL;
 
 // INDEX TO KNOW WICH DATABASE TO USE FOR EACH OPERATION
 db_t type = NONE;
 db_t conv = NONE;
+
+static char *trimStr(char *str)
+{
+    str[strlen(str) - 1] = '\0';
+    return (str + 1);
+}
 
 /**
  * \brief   Callback function to insert an element of the Table Event from MYSQL to another Database.
@@ -172,14 +181,15 @@ static void callbackHighScoreMongo()
  */
 void insertHighscore(const char *player, size_t move, size_t turn, size_t score)
 {
-    char querySQL[300];
+    neo4j_result_stream_t *buffer = NULL;
     bson_t *doc = bson_new();
     bson_oid_t oid;
+    char query[300];
 
-    sprintf(querySQL, "INSERT INTO Highscore (player, move, turn, score) VALUES ('%s', %zu, %zu, %zu);", player, move, turn, score);
-    if (type == MY_SQL && mysql && mysql_query(mysql, querySQL) != 0)
+    sprintf(query, "INSERT INTO Highscore (player, move, turn, score) VALUES ('%s', %zu, %zu, %zu);", player, move, turn, score);
+    if (type == MY_SQL && mysql && mysql_query(mysql, query) != 0)
         fprintf(stderr, "Query Failure\n");
-    if (type == SQLITE && sqlite && sqlite3_exec(sqlite, querySQL, 0, 0, NULL) != SQLITE_OK)
+    if (type == SQLITE && sqlite && sqlite3_exec(sqlite, query, 0, 0, NULL) != SQLITE_OK)
         fprintf(stderr, "Query Failure\n");
     if (type == MONGODB && mongodb && highscore) {
         bson_oid_init(&oid, NULL);
@@ -191,6 +201,12 @@ void insertHighscore(const char *player, size_t move, size_t turn, size_t score)
         bson_append_now_utc(doc, "at", -1);
         if (!mongoc_collection_insert(highscore, MONGOC_INSERT_NONE, doc, NULL, NULL))
             fprintf(stderr, "Query Failure\n");
+    }
+    if (type == NEO4J && neo4j) {
+        sprintf(query, "CREATE (:Highscore {player: '%s',  move: %zu, turn: %zu, score: %zu, at: timestamp()})\n", player, move, turn, score);
+        if ((buffer = neo4j_run(neo4j, query, neo4j_null)) == NULL)
+            neo4j_perror(stderr, errno, "Failed to run statement");
+        neo4j_close_results(buffer);
     }
     bson_destroy (doc);
 }
@@ -204,14 +220,15 @@ void insertHighscore(const char *player, size_t move, size_t turn, size_t score)
  */
 void insertEvent(const char *player, size_t turn, const char *action, bool end)
 {
-    char querySQL[300];
+    neo4j_result_stream_t *buffer = NULL;
     bson_t *doc = bson_new();
     bson_oid_t oid;
+    char query[300];
 
-    sprintf(querySQL, "INSERT INTO Event (player, turn, action, end) VALUES ('%s', %zu, '%s', %s);", player, turn, action, (end) ? "TRUE" : "FALSE");
-    if (type == MY_SQL && mysql && mysql_query(mysql, querySQL) != 0)
+    sprintf(query, "INSERT INTO Event (player, turn, action, end) VALUES ('%s', %zu, '%s', %s);", player, turn, action, (end) ? "TRUE" : "FALSE");
+    if (type == MY_SQL && mysql && mysql_query(mysql, query) != 0)
         fprintf(stderr, "Query Failure\n");
-    if (type == SQLITE && sqlite && sqlite3_exec(sqlite, querySQL, 0, 0, NULL) != SQLITE_OK)
+    if (type == SQLITE && sqlite && sqlite3_exec(sqlite, query, 0, 0, NULL) != SQLITE_OK)
         fprintf(stderr, "Query Failure\n");
     if (type == MONGODB && mongodb && event) {
         bson_oid_init(&oid, NULL);
@@ -224,6 +241,12 @@ void insertEvent(const char *player, size_t turn, const char *action, bool end)
         if (!mongoc_collection_insert(event, MONGOC_INSERT_NONE, doc, NULL, NULL))
             fprintf(stderr, "Query Failure\n");
     }
+    if (type == NEO4J && neo4j) {
+        sprintf(query, "CREATE (:Event {player: '%s', turn: %zu, action: '%s', end: %s, at: timestamp()})\n", player, turn, action, (end) ? "true" : "false");
+        if ((buffer = neo4j_run(neo4j, query, neo4j_null)) == NULL)
+            neo4j_perror(stderr, errno, "Failed to run statement");
+        neo4j_close_results(buffer);
+    }
     bson_destroy (doc);
 }
 
@@ -232,8 +255,11 @@ void insertEvent(const char *player, size_t turn, const char *action, bool end)
  */
 int printHighScore()
 {
+    neo4j_result_stream_t *buffer = NULL;
+    neo4j_result_t *node = NULL;
     MYSQL_RES *result = NULL;
     MYSQL_ROW row;
+    char array[4][200];
 
     printf("──────── SCORE BOARD ────────\n");
     printf("%s\t%s\t%s\t%s\n", "NAME", "MOVE", "TURN", "SCORE");
@@ -246,8 +272,19 @@ int printHighScore()
     }
     if (type == SQLITE && sqlite)
         sqlite3_exec(sqlite, SQLHIGHSCORE, callbackPrintHighscore, 0, NULL);
-    if (type == MONGODB && mongodb && highscore && event)
+    if (type == MONGODB && mongodb && highscore)
         callbackPrintHighScoreMongo();
+    if (type == NEO4J && neo4j) {
+        if ((buffer = neo4j_run(neo4j, "MATCH (h:Highscore) RETURN h.player, h.move, h.turn, h.score", neo4j_null)) != NULL) {
+            while ((node = neo4j_fetch_next(buffer)) != NULL) {
+                for (size_t i = 0; i < neo4j_nfields(buffer); i++)
+                    neo4j_tostring(neo4j_result_field(node, i), array[i], sizeof(array[i]));
+                printf("%s\t%s\t%s\t%s\n", trimStr(array[0]), array[1], array[2], array[3]);
+
+            }
+        }
+        neo4j_close_results(buffer);
+    }
     return (EXIT_SUCCESS);
 }
 
@@ -329,6 +366,11 @@ void setDataBase(char *dbName, char *dbConv)
         if ((mongodb = mongoc_client_new("mongodb://admin:secret@127.0.1.1:21000")) != NULL && (event = mongoc_client_get_collection(mongodb, "Punto", "Event")) != NULL  && (highscore = mongoc_client_get_collection(mongodb, "Punto", "Highscore")) != NULL)
             printf("mongodb connected !\n");
     }
+    if (type == NEO4J || conv == NEO4J) {
+        neo4j_client_init();
+        if (( neo4j = neo4j_connect("neo4j://neo4j:secret4j@127.0.1.1:21005", NULL, NEO4J_INSECURE)) == NULL)
+            neo4j_perror(stderr, errno, "Connection failed");
+    }
 }
 
 /**
@@ -345,5 +387,9 @@ void unsetDataBase()
         mongoc_collection_destroy(event);
         mongoc_client_destroy(mongodb);
         mongoc_cleanup();
+    }
+    if ((type == NEO4J || conv == NEO4J) && neo4j) {
+        neo4j_close(neo4j);
+        neo4j_client_cleanup();
     }
 }

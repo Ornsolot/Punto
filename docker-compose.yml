@@ -21,13 +21,15 @@ services:
       - mysqldata:/var/lib/mysql
 
   neo4j:
-    image: neo4j:latest
     container_name: 'neo4j'
+    build:
+      dockerfile: 'data/db/neo4j/Dockerfile'
     ports:
-      - 127.0.1.1:21003:7474
-      - 127.0.1.1:21004:7687
+      - 127.0.1.1:21003:7473
+      - 127.0.1.1:21004:7474
+      - 127.0.1.1:21005:7687
     environment:
-      - NEO4J_AUTH=none
+      - NEO4J_AUTH=neo4j/secret4j
     volumes:
       - neo4jdata:/data/
 
