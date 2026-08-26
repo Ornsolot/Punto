@@ -7,7 +7,7 @@
  * \return  The string containing the number.
  * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
  */
-static char *dec(size_t nbr, char *str)
+static char *utoa(size_t nbr, char *str)
 {
     *--str = '\0';
     if (!nbr) *--str = '0';
@@ -40,7 +40,7 @@ Card_t *setPuntoCard(Font_t *font, unsigned short number, sfColor color, v2f_t c
         sfRectangleShape_setOutlineThickness(card->rect, thick);
         sfRectangleShape_setPosition(card->rect, coord);
         rb = sfRectangleShape_getGlobalBounds(card->rect);
-        card->text = setText(font, dec(number, buffer), card->color);
+        card->text = setText(font, utoa(number, buffer), card->color);
         td = sfText_getGlobalBounds(card->text->core);
         sfText_setPosition(card->text->core, (v2f_t){coord.x + (rb.width / 2 - td.width / 2 - thick), coord.y + (rb.height / 2 - td.height / 2 - (thick * 4))});
     }
