@@ -36,7 +36,7 @@ typedef struct osPuntoCard_s {
     unsigned short    nbr;
 } Card_t;
 
-// FUCTION TO USE THE CARDE / BOARD ELEMENTS
+// FUCTION TO USE THE BOARD ELEMENTS
 Card_t *setPuntoCard(Font_t *font, unsigned short number, sfColor color, v2f_t coord);
 Card_t ***setPuntoCardBoard(Font_t *font, size_t size);
 void printPuntoCard(Window_t *frame, Card_t *card);
@@ -59,7 +59,7 @@ Player_t **setPuntoPlayerGroup(Font_t *font, size_t *size, char **name, sfColor 
 void unsetPuntoPlayerGroup(Player_t **player, size_t length);
 
 /**
- * \brief   The object reresenting the asset of the game.
+ * \brief   The object representing the asset of the game.
  */
 typedef struct osPuntoData_s {
     SndBuffer_t *select;
@@ -70,7 +70,7 @@ typedef struct osPuntoData_s {
 } PuntoData_t;
 
 /**
- * \brief   The object reresenting a Tuple of the best score monitored.
+ * \brief   The object representing a Tuple of the best score monitored.
  */
 typedef struct osPuntoTuple_s {
     sfColor color;
@@ -79,7 +79,7 @@ typedef struct osPuntoTuple_s {
 } Tuple_t;
 
 /**
- * \brief   The object reresenting the scene (board + hud) of the game.
+ * \brief   The object representing the scene (board + hud) of the game.
  */
 typedef struct osPuntoScene_s {
     size_t      size;
