@@ -5,15 +5,18 @@ This is a Punto Game made in C with OCML (based itself on OCL & SFML) libraries,
 You can use it on Windows or Mac (using Brew) but i'm unsure of the steps to follow to set it up correctly.
 
 ## TODO List (Future Plan)
-+ Add Dynamic Board.
-+ Add 3 player mod.
-+ Rework
-+ Add Game Template.
-+ Add UI To select template.
-+ Use free OST / FX.
-+ Rework Game visual.
-+ Rework or remove Board scaling.
-+ Switch to Vulkan API.
++ Code Rework / Refactoring:
+  + Add the Second round.
+  + Rework or remove Board scaling.
+  + Add Dynamic Board.
+  + Add Game Template.
+    + Add 3 player and alternative mod.
+  + Switch to Vulkan API.
+
++ U.I Change and tweak:
+  + Add UI To select template.
+  + Use free OST / FX.
+  + Rework Game visual.
 
 ## How to play
 
@@ -32,18 +35,18 @@ The first player starts and reveals their top card, placing it in the middle of 
 
 **Place next to a card:** Cards may be placed side-to-side or corner-to-corner.
 
+<img src="doc/src/img/CardNext" alt="" width="250"/>
 
 **Place on top of a card:** You may only place a card on top of one with fewer points.
+
+<img src="doc/src/img/CardTop.jpg" alt="" width="250"/>
 
 
 Important : The playing area has a maximum size of 6x6. Choose wisely where to place your cards!
 
-Ending the Round
-
-As soon as you've placed 4 (3-4 player game) or 5 cards (2 player game) of the same color in a row - horizontally, vertically, or diagonally - you win the round!
-
+## Ending the Round
+As soon as you've placed 4 (3-4 player) or 5 (2 player) cards of the same color in a row - horizontally, vertically, or diagonally - you win the round!
 Take the card with the most points from your winning row and remove it from the game. The remaining cards are all returned to their respective players and shuffled.
-
 After that a new round begins, starting with the player to the left of the previous round s winner.
 
 
