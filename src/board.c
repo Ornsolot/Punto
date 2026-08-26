@@ -2,25 +2,25 @@
 
 /**
  * \brief   Convert an integer into a string.
- * \param   x the number to convert into a string.
- * \param   s the string that will be fill with the number.
- * \return  the string containing the number.
+ * \param   nbr The number to convert into a string.
+ * \param   str The string that will be filled with the number.
+ * \return  The string containing the number.
  * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
  */
-static char *dec(size_t x, char *s)
+static char *dec(size_t nbr, char *str)
 {
-    *--s = 0;
-    if (!x) *--s = '0';
-    for (; x; x/=10) *--s = '0'+x%10;
-    return (s);
+    *--str = '\0';
+    if (!nbr) *--str = '0';
+    for (; nbr; nbr /= 10) *--str = '0' + nbr % 10;
+    return (str);
 }
 
 /**
  * \brief   Create an Card_t Object.
- * \param   font the of the card.
- * \param   number the number on the card.
- * \param   color the color of the card (number and outline).
- * \param   coord the coordinate (v2f_t){x, y} of the card.
+ * \param   font   The font of the number on the card.
+ * \param   number The number on the card.
+ * \param   color  The color of the card (number and outline).
+ * \param   coord  The coordinate (v2f_t){x, y} of the card.
  * \return  An instance of the Card_t Object.
  */
 Card_t *setPuntoCard(Font_t *font, unsigned short number, sfColor color, v2f_t coord)
@@ -49,8 +49,8 @@ Card_t *setPuntoCard(Font_t *font, unsigned short number, sfColor color, v2f_t c
 
 /**
  * \brief   Create an matix of pointer to Card_t Object.
- * \param   font the of the board's card.
- * \param   size the number of row & col of the matrix.
+ * \param   font The font of the board's card.
+ * \param   size The number of row & col of the matrix.
  * \return  An matrix of pointer to Card_t Object.
  */
 Card_t ***setPuntoCardBoard(Font_t *font, size_t size)
@@ -69,8 +69,8 @@ Card_t ***setPuntoCardBoard(Font_t *font, size_t size)
 
 /**
  * \brief   Draw a Card_t Object.
- * \param   frame the window to draw into.
- * \param   card the card to draw.
+ * \param   frame The window to draw into.
+ * \param   card  The card to draw.
  */
 void printPuntoCard(Window_t *frame, Card_t *card)
 {
@@ -81,10 +81,10 @@ void printPuntoCard(Window_t *frame, Card_t *card)
 }
 
 /**
- * \brief   Create an matix of pointer to Card_t Object.
- * \param   frame the window to draw into.
- * \param   board the board (matrix of pointer to Card_t Object) to draw.
- * \param   size the number of row & col of the matrix.
+ * \brief   Draw an matix of pointer to Card_t Object.
+ * \param   frame The window to draw into.
+ * \param   board The board (matrix of pointer to Card_t Object) to draw.
+ * \param   size The number of row & col of the matrix.
  */
 void printPuntoCardBoard(Window_t *frame, Card_t ***board, size_t size)
 {
@@ -97,7 +97,7 @@ void printPuntoCardBoard(Window_t *frame, Card_t ***board, size_t size)
 
 /**
  * \brief   Free the memory allocated to an Card_t Object.
- * \param   card the Card_t Object to free.
+ * \param   card The Card_t Object to free.
  */
 void unsetPuntoCard(Card_t *card)
 {
@@ -110,8 +110,8 @@ void unsetPuntoCard(Card_t *card)
 
 /**
  * \brief   Free the memory allocated to an matix of pointer to Card_t Object.
- * \param   board the board (matrix of pointer to Card_t Object) to free.
- * \param   size the number of row & col of the matrix.
+ * \param   board The board (matrix of pointer to Card_t Object) to free.
+ * \param   size  The number of row & col of the matrix.
  */
 void unsetPuntoCardBoard(Card_t ***board, size_t size)
 {
