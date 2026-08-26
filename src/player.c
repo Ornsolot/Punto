@@ -1,11 +1,13 @@
 #include "punto.h"
 
 /**
- * \brief   Free the memory allocated to the group of player.
- * \param   font the font of the cards of the deck.
- * \param   length the length of the deck (18).
- * \param   name the name of the player.
- * \param   color the colors of the cards.
+ * \brief   Setup the group of player for the 2 player configuration.
+ *
+ * \param   font  The font of the cards of the decks.
+ * \param   size  The length of the groupe (2 or 4).
+ * \param   name  The list of player's names.
+ * \param   color The list of 4 color for the player deck.
+ * \return  A pointer to an instance of Player_t Object.
  */
 static Player_t *setPunto2Player(Font_t *font, size_t length, char *name, sfColor *color)
 {
@@ -25,11 +27,13 @@ static Player_t *setPunto2Player(Font_t *font, size_t length, char *name, sfColo
 }
 
 /**
- * \brief   Free the memory allocated to the group of player.
- * \param   font the font of the cards of the deck.
- * \param   length the length of the deck (9).
- * \param   name the name of the player.
- * \param   color the color of the cards.
+ * \brief   Setup the group of player for the 4 player configuration.
+ *
+ * \param   font  The font of the cards of the decks.
+ * \param   size  The length of the groupe (2 or 4).
+ * \param   name  The list of player's names.
+ * \param   color The color for the player deck.
+ * \return  A pointer to an instance of Player_t Object.
  */
 static Player_t *setPunto4Player(Font_t *font, size_t length, char *name, sfColor color)
 {
@@ -48,9 +52,13 @@ static Player_t *setPunto4Player(Font_t *font, size_t length, char *name, sfColo
 }
 
 /**
- * \brief   Free the memory allocated to the group of player.
- * \param   font the font of the cards of the decks.
- * \param   size the length of the groupe (2 or 4).
+ * \brief   Setup the group of player.
+ *
+ * \param   font  The font of the cards of the decks.
+ * \param   size  The length of the groupe (2 or 4).
+ * \param   name  The list of player's names.
+ * \param   color The list of 4 color for the player deck.
+ * \return  A list of pointer to Player_t Object.
  */
 Player_t **setPuntoPlayerGroup(Font_t *font, size_t *size, char **name, sfColor *color)
 {
@@ -70,7 +78,8 @@ Player_t **setPuntoPlayerGroup(Font_t *font, size_t *size, char **name, sfColor 
 
 /**
  * \brief   Free the memory allocated to a player.
- * \param   player the player to free.
+ *
+ * \param   player The player to free.
  */
 static void unsetPuntoPlayer(Player_t *player)
 {
@@ -84,8 +93,9 @@ static void unsetPuntoPlayer(Player_t *player)
 
 /**
  * \brief   Free the memory allocated to the group of player.
- * \param   player the groupe of player to free.
- * \param   length the length of the groupe (2 or 4).
+ *
+ * \param   player The groupe of player to free.
+ * \param   length The length of the groupe (2 or 4).
  */
 void unsetPuntoPlayerGroup(Player_t **player, size_t length)
 {
