@@ -6,19 +6,15 @@
 #include "ocl.h"
 
 // DATABASE HEADER
+#include <mongoc/mongoc.h>
+#include <neo4j-client.h>
 #include <mysql/mysql.h>
 #include <sqlite3.h>
-
-#define SQLHIGHSCORE "SELECT player, move, turn, score FROM Highscore;"
-#define SQLEVENT "SELECT player, turn, action, end FROM Event;"
-
-#include <mongoc/mongoc.h>
 #include <bson.h>
 
-#include <neo4j-client.h>
-
-// CHECK IF TWO SFCOLOR ARE DIFFERENT.
-#define CMPCOLOR(c1, c2) (sfColor_toInteger(c1) != sfColor_toInteger(c2))
+// DATABASE REQUESTS
+#define SQLHIGHSCORE "SELECT player, move, turn, score FROM Highscore;"
+#define SQLEVENT "SELECT player, turn, action, end FROM Event;"
 
 // CHECK THE TYPE OF CONNEXION
 typedef enum DATABSE { NONE = 0, MY_SQL = 1, SQLITE = 2, MONGODB = 3, NEO4J = 4 } db_t;
@@ -26,6 +22,9 @@ typedef enum DATABSE { NONE = 0, MY_SQL = 1, SQLITE = 2, MONGODB = 3, NEO4J = 4 
 
 // CHECK IF YOU CAN INSERT IN A CASE
 #define VALID(y, x, b, c, s, d) (b[y][x]->nbr < c->nbr && CMPCOLOR(b[y][x]->color, c->color) && ((x == s/2 && y == s/2) || (x == s/2-1 && y == s/2-1) || (x == s/2-1 && y == s/2) || (x == s/2 && y == s/2-1) || (x > 0 && CMPCOLOR(b[y][x-1]->color, d)) || (x < s-1 && CMPCOLOR(b[y][x+1]->color, d)) || (y > 0 && CMPCOLOR(b[y-1][x]->color, d)) || (y < s-1 && CMPCOLOR(b[y+1][x]->color, d))  || (x > 0 && y > 0 && CMPCOLOR(b[y-1][x-1]->color, d)) || (x < s-1 && y < s-1 && CMPCOLOR(b[y+1][x+1]->color, b[y][x]->color)) || (y > 0 && x < s-1 && CMPCOLOR(b[y-1][x+1]->color, d)) || (x > 0 && y < s-1 && CMPCOLOR(b[y+1][x-1]->color, d)) ))
+
+// CHECK IF TWO SFCOLOR ARE DIFFERENT.
+#define CMPCOLOR(c1, c2) (sfColor_toInteger(c1) != sfColor_toInteger(c2))
 
 /**
  * \brief   The object reresenting the carde of the game.
@@ -114,10 +113,12 @@ bool eventPunto(Punto_t *game);
 // DATABASE SUB FUCTION
 void insertHighscore(const char *player, size_t move, size_t turn, size_t score);
 void insertEvent(const char *player, size_t turn, const char *action, bool end);
+
 // DATABASE MAIN FUNCTION
 int fillPuntoDatabase(size_t size, size_t scale);
 int migrateDatabase();
 int printHighScore();
+
 // DATABASE DRIVER FUCTION
 void setDataBase(char *dbName, char *dbConv);
 void unsetDataBase();
