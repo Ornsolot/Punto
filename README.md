@@ -30,51 +30,42 @@ Sort the deck into 4 stacks: 1 of each color. Each player takes the following ca
 - 4 players: Each player takes 1 set of color cards.
 Shuffle all of your cards together and stack them face-down in front of you
 
-## Game Play
+<img src="doc/src/img/GamePlay.jpg" alt="" width="900"/>
+
+### Game Play
 The first player starts and reveals their top card, placing it in the middle of the play area. Play proceeds left. On each subsequent turn, you reveal your top card and must place it next to or on top of a card already in play.
 
 **Place next to a card:** Cards may be placed side-to-side or corner-to-corner.
 
-<img src="doc/src/img/CardNext.jpg" alt="" width="250"/>
+<img src="doc/src/img/CardNext.jpg" alt="" width="300"/>
 
 **Place on top of a card:** You may only place a card on top of one with fewer points.
 
-<img src="doc/src/img/CardTop.jpg" alt="" width="250"/>
+<img src="doc/src/img/CardTop.jpg" alt="" width="300"/>
 
-
-Important : The playing area has a maximum size of 6x6. Choose wisely where to place your cards!
+**Important:** The playing area has a maximum size of 6x6. Choose wisely where to place your cards !
 
 ## Ending the Round
 As soon as you've placed 4 (3-4 player) or 5 (2 player) cards of the same color in a row - horizontally, vertically, or diagonally - you win the round!
 Take the card with the most points from your winning row and remove it from the game. The remaining cards are all returned to their respective players and shuffled.
 After that a new round begins, starting with the player to the left of the previous round s winner.
 
+<img src="doc/src/img/EndingRoom.jpg" alt="" width="900"/>
 
-Special Notes for 3 Players
-
-    The neutral color does not count towards a victory.
-
-    Collect and shuffle all the neutral cards that were played this round, then randomly deal them back to each player, starting with the winner of the round. (Players retain any neutral cards that were still in their deck at the end of the round).
-
+### Notes for 3 Players
+The neutral color does not count towards a victory.
+Collect and shuffle all the neutral cards that were played this round, then randomly deal them back to each player, starting with the winner of the round. (Players retain any neutral cards that were still in their deck at the end of the round).
 If a round ends in a stalemate, the winner is whoever has the most visible rows of 3 cards (or, in a two-player game, most visible rows of 4 cards).
-
 If there is still a stalemate, whoever placed the row of 3 cards (or, in a two-player game, the row of 4 cards ) showing the fewest points wins.
 
 
-End of the Game
-
+## End of the Game
 The first player to win 2 rounds wins the game.
-Team Variant (for 4 Players)
 
+### Team Variant (for 4 Players)
 Team members sit across from one another, so each turn alternates teams and players.
-
 Similar to a two-player game, each team will receive all cards of 2 colors and shuffle them together in a stack, face-down.
-
-Each team member receives half of the shared stack.
-
-Object of the Game
-
-The First Team To Score 5 Cards Of The Same Color In A Row.
+Each team member receives half of the shared stack and the First Team To Score 5 Cards Of The Same Color In A Row.
 
 
 ## SETUP
@@ -89,9 +80,12 @@ git clone --recurse-submodules git@github.com:Ornsolot/Punto.git
 
 To use the Wizard, use the following command at the root of the project to install all the libraries and tools necessary to deploy, compile and use the project:
 
+```shell
+./wizard.sh $(whoami)
+```
+List
 - **Git:** .
 - **lsb-release:** Shell command that displays information about Linux system's version and distribution.
-- **net-tools:** .
 - **build-essential:** .
 - **libcsfml-dev:** C Multimedia library (technically a binding of a C++ library).
 - **libmongoc-dev:** C library to do MongoDB querries.
@@ -99,10 +93,6 @@ To use the Wizard, use the following command at the root of the project to insta
 - **libmysqlclient-dev:** C library to do MySQL querries.
 - **Docker:** Tools used to conteneurise the databases.
 - **sqlite3:** The only Database that i couldn't conteneurise...
-
-```shell
-sudo ./wizard.sh $(whoami)
-```
 
 ### Compile Game and deploy the containers
 
