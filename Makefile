@@ -11,8 +11,7 @@
 ##################
 
 ## NETWORK
-CARD	= $(shell ip route | grep -m1 default | cut -d ' ' -f5)
-LAN		= 127.0.1.1
+LAN = 127.0.1.1
 
 ## Binary file(s)
 BDR	= .
@@ -137,5 +136,3 @@ $(ODR)/%.o: $(SDR)/%.c
 	@mkdir -p $(@D)
 	@$(CC) $(CCFLAGS) -o $@ -c $<
 	@echo " ├─ [✓] $<"
-
-#$(foreach src, $(ELB), make -C "$(LDR)/${src} clean") 
