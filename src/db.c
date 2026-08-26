@@ -21,9 +21,10 @@ db_t conv = NONE;
 
 /*
  * \brief   Fix a small viual inconsticensy with a Neo4j query.
+ * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
+ *
  * \param   str The str to trim.
  * \return  The string containing the number.
- * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
  */
 static char *trimStr(char *str)
 {
@@ -33,10 +34,12 @@ static char *trimStr(char *str)
 
 /**
  * \brief   Callback function to insert an element of the Table Event from MYSQL to another Database.
+ *
  * \param   NotUsed the callback force it's existence for niche application.
  * \param   ac the number of element in av.
  * \param   av the list of value of the query.
  * \param   env the list of key of the query.
+ * \return  IS ALWAYS 1.
  */
 static int callbackEvent(void *NotUsed, int ac, char **av, char **env)
 {
@@ -47,7 +50,7 @@ static int callbackEvent(void *NotUsed, int ac, char **av, char **env)
 
 /**
  * \brief   Callback function to insert an element of the Table Event from MONGODB to another Database.
- * \warning I had to use BSON_t file to do so, it's long code for what it's supposed to do (lots of conversion).
+ * \warning It use BSON_t file to do so, it's long code for what it's supposed to do (lots of conversion).
  */
 static void callbackEventMongo()
 {
@@ -83,10 +86,12 @@ static void callbackEventMongo()
 
 /**
  * \brief   Callback function to print an element of the Table Highscore from MYSQL.
+ *
  * \param   NotUsed The callback force it's existence for niche application.
  * \param   ac      The number of element in av.
  * \param   av      The list of value of the query.
  * \param   env     The list of key of the query.
+ * \return  IS ALWAYS 1.
  */
 static int callbackPrintHighscore(void *NotUsed, int ac, char **av, char **env)
 {
@@ -97,10 +102,12 @@ static int callbackPrintHighscore(void *NotUsed, int ac, char **av, char **env)
 
 /**
  * \brief   Callback function to insert an element of the Table Highscore from MYSQL to another Database.
+ *
  * \param   NotUsed The callback force it's existence for niche application.
  * \param   ac      The number of element in av.
  * \param   av      The list of value of the query.
  * \param   env     The list of key of the query.
+ * \return  IS ALWAYS 1.
  */
 static int callbackHighscore(void *NotUsed, int ac, char **av, char **env)
 {
@@ -111,7 +118,7 @@ static int callbackHighscore(void *NotUsed, int ac, char **av, char **env)
 
 /**
  * \brief   Callback function to insert an element of the Table Highscore from MONGODB to another Database.
- * \warning I had to use BSON_t file to do so, it's long ccode for what it's supposed to do (lots of conversion).
+ * \warning It use BSON_t file to do so, it's long code for what it's supposed to do (lots of conversion).
  */
 static void callbackPrintHighScoreMongo()
 {
@@ -147,7 +154,7 @@ static void callbackPrintHighScoreMongo()
 
 /**
  * \brief   Callback function to insert an element of the Table Highscore from MONGODB to another Database.
- * \warning I had to use BSON_t file to do so, it's long ccode for what it's supposed to do (lots of conversion).
+ * \warning It use BSON_t file to do so, it's long code for what it's supposed to do (lots of conversion).
  */
 static void callbackHighScoreMongo()
 {
@@ -183,6 +190,7 @@ static void callbackHighScoreMongo()
 
 /**
  * \brief   Insert an element in the table Highscore.
+ *
  * \param   player The name of the player.
  * \param   move   The number of moves of the player (turn he played).
  * \param   turn   The current turn of the game.
@@ -222,6 +230,7 @@ void insertHighscore(const char *player, size_t move, size_t turn, size_t score)
 
 /**
  * \brief   Insert an element in the table Event.
+ *
  * \param   player The name of the player.
  * \param   turn   The current turn of the game.
  * \param   action The action (move or event triggered) made by the player.
@@ -261,6 +270,8 @@ void insertEvent(const char *player, size_t turn, const char *action, bool end)
 
 /**
  * \brief   Function to print all elements from a Databse to the treminal.
+ *
+ * \return  IS ALWAYS 1.
  */
 int printHighScore()
 {
@@ -299,6 +310,8 @@ int printHighScore()
 
 /**
  * \brief   Function to insert all elements from a Databse to another.
+ *
+ * \return  IS ALWAYS 1.
  */
 int migrateDatabase()
 {
@@ -330,10 +343,12 @@ int migrateDatabase()
 
 /**
  * \brief   Populate a database with a false game of punto.
- * \param   size  The size of the board (6 by default).
- * \param   scale The scale of the board.
  * \warning Let scale at 1, you can't scroll down so you will be stuck because you can't see the full board !
  * \warning It use rng to do so and the data might be a bit erratic...
+ *
+ * \param   size  The size of the board (6 by default).
+ * \param   scale The scale of the board.
+ * \return  IS ALWAYS 1.
  */
 int fillPuntoDatabase(size_t size, size_t scale)
 {
@@ -358,6 +373,7 @@ int fillPuntoDatabase(size_t size, size_t scale)
 
 /**
  * \brief   Connect to the database asked by the user prompt.
+ *
  * \param   dbName The prompt for the database that elements will be inserted into.
  * \param   dbConv The prompt for the database that elements will be taken from.
  */
