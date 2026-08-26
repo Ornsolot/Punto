@@ -81,27 +81,29 @@ static void checkScoreRow(Punto_t *game, v2i_t click)
 }
 
 /**
- * \brief   Find the biggest tuple of a diagonal (left to right).
+ * \brief   Find the biggest tuple of a diagonal from uper-left to lower-right.
+ *
  * \param   game the game to monitor.
- * \param   start the coordinate to start the query.
  */
-static void checkScoreDiag1(Punto_t *game, v2i_t start)
+static void checkScoreDiagLeftToRight(Punto_t *game)
 {
     Tuple_t tuple = (Tuple_t){sfBlack, 0, 0};
     sfUint32 buffer = 0;
-    size_t y = start.y;
-    size_t x = start.x;
+    short maxDiag = (game->maxPlayer < 4) ? 3 : 5;
+    short bound = game->scene.size - game->match;
 
-    for (;  y < game->scene.size && x < game->scene.size; y++, x++) {
-        buffer = sfColor_toInteger(game->scene.board[y][x]->color);
-        if (buffer == sfColor_toInteger(tuple.color)) {
-            tuple.score += game->scene.board[y][x]->nbr;
-            tuple.length++;
-        } else if (buffer != INT_WHITE) {
-            tuple = (Tuple_t){game->scene.board[y][x]->color, 1, game->scene.board[y][x]->nbr};
+    for (short i = 0; i < maxDiag; i++) {
+        for (size_t y = (i > bound) ? i - bound : 0, size_t x = (i < bound) ? bound - i : 0;  y < game->scene.size && x < game->scene.size; y++, x++) {
+            buffer = sfColor_toInteger(game->scene.board[y][x]->color);
+            if (buffer == sfColor_toInteger(tuple.color)) {
+                tuple.score += game->scene.board[y][x]->nbr;
+                tuple.length++;
+            } else if (buffer != INT_WHITE) {
+                tuple = (Tuple_t){game->scene.board[y][x]->color, 1, game->scene.board[y][x]->nbr};
+            }
+            if (game->scene.max.length < tuple.length || (game->scene.max.score > tuple.score && game->scene.max.length == tuple.length))
+                game->scene.max = (Tuple_t){tuple.color, tuple.length, tuple.score};
         }
-        if (game->scene.max.length < tuple.length || (game->scene.max.score > tuple.score && game->scene.max.length == tuple.length))
-            game->scene.max = (Tuple_t){tuple.color, tuple.length, tuple.score};
     }
 }
 
