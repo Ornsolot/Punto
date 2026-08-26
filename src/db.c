@@ -3,12 +3,15 @@
 
 // MYSQL GLOBAL VARIABLE
 MYSQL *mysql = NULL;
+
 // SQLITE GLOBAL VARIABLE
 sqlite3 *sqlite = NULL;
+
 // MONGODB GLOBAL VARIABLES
 mongoc_client_t *mongodb = NULL;
 mongoc_collection_t *highscore = NULL;
 mongoc_collection_t *event = NULL;
+
 // NEO4J GLOBAL VARIABLE
 neo4j_connection_t *neo4j = NULL;
 
@@ -16,6 +19,12 @@ neo4j_connection_t *neo4j = NULL;
 db_t type = NONE;
 db_t conv = NONE;
 
+/*
+ * \brief   Fix a small viual inconsticensy with a Neo4j query.
+ * \param   str The str to trim.
+ * \return  The string containing the number.
+ * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
+ */
 static char *trimStr(char *str)
 {
     str[strlen(str) - 1] = '\0';
@@ -38,7 +47,7 @@ static int callbackEvent(void *NotUsed, int ac, char **av, char **env)
 
 /**
  * \brief   Callback function to insert an element of the Table Event from MONGODB to another Database.
- * \warning I had to use BSON_t file to do so, it's long ccode for what it's supposed to do (lots of conversion).
+ * \warning I had to use BSON_t file to do so, it's long code for what it's supposed to do (lots of conversion).
  */
 static void callbackEventMongo()
 {
@@ -74,10 +83,10 @@ static void callbackEventMongo()
 
 /**
  * \brief   Callback function to print an element of the Table Highscore from MYSQL.
- * \param   NotUsed the callback force it's existence for niche application.
- * \param   ac the number of element in av.
- * \param   av the list of value of the query.
- * \param   env the list of key of the query.
+ * \param   NotUsed The callback force it's existence for niche application.
+ * \param   ac      The number of element in av.
+ * \param   av      The list of value of the query.
+ * \param   env     The list of key of the query.
  */
 static int callbackPrintHighscore(void *NotUsed, int ac, char **av, char **env)
 {
@@ -88,10 +97,10 @@ static int callbackPrintHighscore(void *NotUsed, int ac, char **av, char **env)
 
 /**
  * \brief   Callback function to insert an element of the Table Highscore from MYSQL to another Database.
- * \param   NotUsed the callback force it's existence for niche application.
- * \param   ac the number of element in av.
- * \param   av the list of value of the query.
- * \param   env the list of key of the query.
+ * \param   NotUsed The callback force it's existence for niche application.
+ * \param   ac      The number of element in av.
+ * \param   av      The list of value of the query.
+ * \param   env     The list of key of the query.
  */
 static int callbackHighscore(void *NotUsed, int ac, char **av, char **env)
 {
@@ -174,10 +183,10 @@ static void callbackHighScoreMongo()
 
 /**
  * \brief   Insert an element in the table Highscore.
- * \param   palyer the name of the player.
- * \param   move the number of moves of the player (turn he played).
- * \param   turn the current turn of the game.
- * \param   score how muche the player scored.
+ * \param   player The name of the player.
+ * \param   move   The number of moves of the player (turn he played).
+ * \param   turn   The current turn of the game.
+ * \param   score  How muche the player scored.
  */
 void insertHighscore(const char *player, size_t move, size_t turn, size_t score)
 {
@@ -213,10 +222,10 @@ void insertHighscore(const char *player, size_t move, size_t turn, size_t score)
 
 /**
  * \brief   Insert an element in the table Event.
- * \param   palyer the name of the player.
- * \param   turn the current turn of the game.
- * \param   action the action (move or event triggered) made by the player.
- * \param   end is this an end of the game event ?
+ * \param   player The name of the player.
+ * \param   turn   The current turn of the game.
+ * \param   action The action (move or event triggered) made by the player.
+ * \param   end    If this is an end of game event.
  */
 void insertEvent(const char *player, size_t turn, const char *action, bool end)
 {
@@ -321,10 +330,10 @@ int migrateDatabase()
 
 /**
  * \brief   Populate a database with a false game of punto.
- * \param   size the size of the board (6 by default).
- * \param   scale the scale of the board.
- * \warning Let scale at 1, you can't scroll down so you will be stuck because you can't see the full board.
- * \warning It use rng to do so and the data might be a bit erratic
+ * \param   size  The size of the board (6 by default).
+ * \param   scale The scale of the board.
+ * \warning Let scale at 1, you can't scroll down so you will be stuck because you can't see the full board !
+ * \warning It use rng to do so and the data might be a bit erratic...
  */
 int fillPuntoDatabase(size_t size, size_t scale)
 {
@@ -338,25 +347,25 @@ int fillPuntoDatabase(size_t size, size_t scale)
     printf("Generating %zu move.\n", max);
     for (size_t i = 0; i < max; i++) {
         current = (current == (int)(size - 1)) ? 0 : current + 1;
-        sprintf(action, "insert %zu %s card at {y:%zu, x:%zu}", getNaturalRNG(1, 9), color[current][(size == 2) ? 0 : getNaturalRNG(0, 1)], getNaturalRNG(0, 6), getNaturalRNG(0, 6));
-        insertEvent(player[current], i+1, action, false);
+        sprintf(action, "insert %zu %s card at {y: %zu, x: %zu}", getNaturalRNG(1, 9), color[current][(size == 2) ? 0 : getNaturalRNG(0, 1)], getNaturalRNG(0, 6), getNaturalRNG(0, 6));
+        insertEvent(player[current], i  +1, action, false);
     }
     sprintf(action, "Win with the score of %zu !", score);
     insertEvent(player[current], max, action, true);
-    insertHighscore(player[current], max/size, max, score);
+    insertHighscore(player[current], max / size, max, score);
     return (EXIT_SUCCESS);
 }
 
 /**
- * \brief   Connect to the database asked by the user prompt
- * \param   dbName The prompt for the database that will elements inserted into.
- * \param   dbConv The prompt for the database that will elements taken from.
+ * \brief   Connect to the database asked by the user prompt.
+ * \param   dbName The prompt for the database that elements will be inserted into.
+ * \param   dbConv The prompt for the database that elements will be taken from.
  */
 void setDataBase(char *dbName, char *dbConv)
 {
     type = DB(dbName);
     conv = DB(dbConv);
-    
+
     if ((type == MY_SQL || conv == MY_SQL) && (mysql = mysql_init(mysql)) != NULL && mysql_real_connect(mysql, "127.0.1.1", "admin", "secret", "Punto", 21002, NULL, 0))
         printf("mysql connected !\n");
     if ((type == SQLITE || conv == SQLITE) && sqlite3_open("data/db/punto.db", &sqlite) == SQLITE_OK)
@@ -374,7 +383,7 @@ void setDataBase(char *dbName, char *dbConv)
 }
 
 /**
- * \brief   Setup the database driver(s).
+ * \brief   Close the database driver(s).
  */
 void unsetDataBase()
 {
