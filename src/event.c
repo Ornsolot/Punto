@@ -35,7 +35,7 @@ static char *colorToString(sfColor color)
 /**
  * \brief   Find the biggest tuple of a column.
  *
- * \param   game  The game to monitor.
+ * \param   game  The game containing the board to parse.
  * \param   click The coordinate of the click.
  */
 static void checkScoreCol(Punto_t *game, v2i_t click)
@@ -59,7 +59,7 @@ static void checkScoreCol(Punto_t *game, v2i_t click)
 /**
  * \brief   Find the biggest tuple of a row.
  *
- * \param   game  The game to monitor.
+ * \param   game  The game containing the board to parse.
  * \param   click The coordinate of the click.
  */
 static void checkScoreRow(Punto_t *game, v2i_t click)
@@ -83,7 +83,7 @@ static void checkScoreRow(Punto_t *game, v2i_t click)
 /**
  * \brief   Find the biggest tuple of a diagonal from upper-left to lower-right.
  *
- * \param   game the game to monitor.
+ * \param   game the game containing the board to parse.
  */
 static void checkScoreDiagLeftToRight(Punto_t *game)
 {
@@ -110,7 +110,7 @@ static void checkScoreDiagLeftToRight(Punto_t *game)
 /**
  * \brief   Find the biggest tuple of a diagonal from upper-right to lower-left.
  *
- * \param   game the game to monitor.
+ * \param   game The game containing the board to parse.
  */
 static void checkScoreDiagRightToLeft(Punto_t *game)
 {
@@ -135,36 +135,25 @@ static void checkScoreDiagRightToLeft(Punto_t *game)
 }
 
 /**
- * \brief   Find the biggest tuple of the board.
- * \param   game the game to monitor.
- * \param   click the coordinate of the click.
- * \return  True if the game is finished and false otherwise.
+ * \brief   Find the biggest tuple of the board, the win condition of the game.
+ *
+ * \param   game  The game containing the board to parse.
+ * \param   click The coordinate of the click.
+ * \return  True if the game is finished and False otherwise.
  */
 static bool checkScore(Punto_t *game, v2i_t click)
 {
     checkScoreCol(game, click);
     checkScoreRow(game, click);
-    if (click.x == click.y)
-        checkScoreDiag1(game, (v2i_t){0, 0});
-    for (size_t i = 1; i <= game->scene.size - game->match; i++) {
-        if ((size_t)click.x == click.y + i)
-            checkScoreDiag1(game, (v2i_t){i, 0});
-        if ((size_t)click.y == click.x + i)
-            checkScoreDiag1(game, (v2i_t){0, i});
-    }
-    if ((size_t)(click.x + click.y) == game->scene.size - 1)
-        checkScoreDiag2(game, (v2i_t){5, 0});
-    for (size_t i = 1; i <= game->scene.size - game->match; i++) {
-        if ((size_t)(click.x + click.y) == game->scene.size - (i + 1))
-            checkScoreDiag2(game, (v2i_t){5 - i, 0});
-        if ((size_t)(click.x + click.y) == game->scene.size + i - 1)
-            checkScoreDiag2(game, (v2i_t){5, i});
-    }
+    checkScoreDiagLeftToRight(game);
+    checkScoreDiagRightToLeft(game);
+    
     return ((game->scene.max.length == game->match) ? true : false);
 }
 
 /**
- * \brief   Find the biggest tuple of the board.
+ * \brief   Manage the Click of the mouse events, change cards and players on the board.
+ *
  * \param   game the game to monitor.
  * \param   click the coordinate of the click.
  * \return  True if the game is finished and false otherwise.
@@ -203,22 +192,23 @@ static bool clickEvent(Punto_t *game, v2i_t click)
 }
 
 /**
- * \brief   Manage the events of the board (reaction to player / environmental input).
- * \param   game the game to monitor.
- * \param   click the coordinate of the click.
- * \param   valid the coordinate of the click.
- * \return  true if the game is finished and false otherwise.
+ * \brief   Manage the Board events of the game, mainly the interactivity of the board.
+ *
+ * \param   game  The game to monitor.
+ * \param   click The coordinate of the click.
+ * \param   valid The coordinate of the click.
+ * \return  True if the game is finished and False otherwise.
  */
 static bool boardEvent(Punto_t *game, v2i_t *click, bool *valid)
 {
     v2i_t mouse = sfMouse_getPositionRenderWindow(game->frame->core);
     bool find = false;
-    bool end = false;
+    bool end = true;
     sfFloatRect rect;
 
     for (size_t y = 0; y < game->scene.size; y++)
         for (size_t x = 0; x < game->scene.size; x++) {
-            if (game->scene.card->nbr > game->scene.board[y][x]->nbr && CMPCOLOR(game->scene.board[y][x]->color, game->scene.card->color))
+            if (end || game->scene.card->nbr > game->scene.board[y][x]->nbr && CMPCOLOR(game->scene.board[y][x]->color, game->scene.card->color))
                 end = false;
             rect = sfRectangleShape_getGlobalBounds(game->scene.board[y][x]->rect);
             if ((find = sfFloatRect_contains(&rect, mouse.x, mouse.y)) == true) {    
@@ -231,9 +221,9 @@ static bool boardEvent(Punto_t *game, v2i_t *click, bool *valid)
 }
 
 /**
- * \brief   Monitor and manage player inpent and event trigger.
- * \param   game the game to monitor.
- * \return  false in case of end of the game event and true otherwise.
+ * \brief   Monitor and manage player input and game event trigger.
+ * \param   game The game to monitor.
+ * \return  False in case of end of the game event and True otherwise.
  */
 bool eventPunto(Punto_t *game)
 {
