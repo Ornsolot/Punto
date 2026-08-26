@@ -1,11 +1,12 @@
 #include "punto.h"
 
 /**
- * \brief   Fill the an instance of Punto_t Object scene element.
- * \param   game the game to print.
- * \param   player the number of player (2 or 4).
- * \param   scale the scale of the game (default 1), make the board & decks bigger.
+ * \brief   Fill the instance of Punto_t Object scene elements.
  * \warning Let scale at 1, you can't scroll to get to the end of the board...
+ *
+ * \param   game   The game to print.
+ * \param   player The number of player (2 or 4).
+ * \param   scale  The scale of the game (default 1), make the board & decks bigger.
  */
 static void setPuntoScene(Punto_t *game, size_t player, size_t scale)
 {
@@ -21,11 +22,12 @@ static void setPuntoScene(Punto_t *game, size_t player, size_t scale)
 }
 
 /**
- * \brief   Create the an instance of Punto_t Object.
- * \param   player the number of player (2 or 4).
- * \param   scale the scale of the game (default 1), make the board & decks bigger.
- * \return  An instance of the Punto_t Object or NULL.
+ * \brief   Create an instance of Punto_t Object.
  * \warning Let scale at 1, you can't scroll to get to the end of the board...
+ 
+ * \param   player The number of player (2 or 4).
+ * \param   scale  The scale of the game (default 1), make the board & decks bigger.
+ * \return  A pointer to an instance of the Punto_t Object or NULL.
  */
 static Punto_t *setPunto(size_t player, size_t scale)
 {
@@ -57,8 +59,9 @@ static Punto_t *setPunto(size_t player, size_t scale)
 }
 
 /**
- * \brief   free the memory allocated to the game.
- * \param   game the game to free.
+ * \brief   Free the memory allocated to the game.
+ *
+ * \param   game The game to free.
  */
 static void unsetPunto(Punto_t *game)
 {
@@ -73,7 +76,7 @@ static void unsetPunto(Punto_t *game)
         unsetPuntoPlayerGroup(game->player, game->maxPlayer);
         unsetText(game->scene.text);
         unsetPuntoCardBoard(game->scene.board, game->scene.size);
-        // Sys
+        // System
         unsetWindow(game->frame);
         unsetSound(game->select);
         unsetSound(game->cancel);
@@ -84,7 +87,8 @@ static void unsetPunto(Punto_t *game)
 
 /**
  * \brief   Print the game board and hud.
- * \param   game the game to print.
+ *
+ * \param   game The game to print.
  */
 static void printPunto(Punto_t *game)
 {
@@ -107,10 +111,11 @@ static void printPunto(Punto_t *game)
 
 /**
  * \brief   The game loop.
- * \param   player the number of player.
- * \param   scale the scale of the board.
- * \return  Error code.
  * \warning Let scale at 1, you can't scroll to get to the end of the board...
+ *
+ * \param   player The number of player.
+ * \param   scale  The scale of the board.
+ * \return  Error code.
  */
 static int loopPunto(size_t player, size_t scale)
 {
@@ -128,9 +133,10 @@ static int loopPunto(size_t player, size_t scale)
 }
 
 /**
- * \brief   The main function with param verification and the game loop.
- * \param   av parametrs send to the fuction
- * \param   ac number of parameters send to the fuction.
+ * \brief   The main function with parameters verification.
+ *
+ * \param   av Parameters send to the function.
+ * \param   ac Number of parameters send to the function.
  * \return  Error code.
  */
 int main(int ac, char *av[])
