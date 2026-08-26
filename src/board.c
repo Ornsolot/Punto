@@ -5,6 +5,7 @@
  * \param   nbr The number to convert into a string.
  * \param   str The string that will be filled with the number.
  * \return  The string containing the number.
+ *
  * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
  */
 static char *utoa(size_t nbr, char *str)
@@ -21,7 +22,7 @@ static char *utoa(size_t nbr, char *str)
  * \param   number The number on the card.
  * \param   color  The color of the card (number and outline).
  * \param   coord  The coordinate (v2f_t){x, y} of the card.
- * \return  An instance of the Card_t Object.
+ * \return  An pointer to an instance of the Card_t Object.
  */
 Card_t *setPuntoCard(Font_t *font, unsigned short number, sfColor color, v2f_t coord)
 {
