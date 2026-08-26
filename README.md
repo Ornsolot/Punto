@@ -35,7 +35,7 @@ The first player starts and reveals their top card, placing it in the middle of 
 
 **Place next to a card:** Cards may be placed side-to-side or corner-to-corner.
 
-<img src="doc/src/img/CardNext" alt="" width="250"/>
+<img src="doc/src/img/CardNext.jpg" alt="" width="250"/>
 
 **Place on top of a card:** You may only place a card on top of one with fewer points.
 
