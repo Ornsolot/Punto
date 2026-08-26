@@ -1,28 +1,109 @@
 # Punto
 
-This is a Punto Game made in C with OCML (based on OCL & OCML) librairies.
-You must use a debian based Linux distro for anything here to work has is.
-You technically can use it on Window / mac but i'm unsure of the steps to follow to set it up cotrrectly.
+## Summary of the project
+This is a Punto Game made in C with OCML (based itself on OCL & SFML) libraries, it work as is on Debian based GNU/Linux distro (even WSL).
+You can use it on Windows or Mac (using Brew) but i'm unsure of the steps to follow to set it up correctly.
+
+## TODO List (Future Plan)
++ Add Dynamic Board.
++ Add 3 player mod.
++ Rework
++ Add Game Template.
++ Add UI To select template.
++ Use free OST / FX.
++ Rework Game visual.
++ Rework or remove Board scaling.
++ Switch to Vulkan API.
+
+## How to play
+
+### Objective of the Game
+Be the first player to score either 5 cards (2 players) or 4 cards (3-4 players) of the same color in a row: horizontally, vertically, or diagonally.
+
+### Board Setup
+Sort the deck into 4 stacks: 1 of each color. Each player takes the following cards, according to the number of players:
+- 2 players: Each player takes 2 sets of color cards.
+- 3 players: Each player takes 1 set of color cards. In addition, randomly deal each player 6 cards of whichever color is left over, as a " neutral" color.
+- 4 players: Each player takes 1 set of color cards.
+Shuffle all of your cards together and stack them face-down in front of you
+
+## Game Play
+The first player starts and reveals their top card, placing it in the middle of the play area. Play proceeds left. On each subsequent turn, you reveal your top card and must place it next to or on top of a card already in play.
+
+**Place next to a card:** Cards may be placed side-to-side or corner-to-corner.
+
+
+**Place on top of a card:** You may only place a card on top of one with fewer points.
+
+
+Important : The playing area has a maximum size of 6x6. Choose wisely where to place your cards!
+
+Ending the Round
+
+As soon as you've placed 4 (3-4 player game) or 5 cards (2 player game) of the same color in a row - horizontally, vertically, or diagonally - you win the round!
+
+Take the card with the most points from your winning row and remove it from the game. The remaining cards are all returned to their respective players and shuffled.
+
+After that a new round begins, starting with the player to the left of the previous round s winner.
+
+
+Special Notes for 3 Players
+
+    The neutral color does not count towards a victory.
+
+    Collect and shuffle all the neutral cards that were played this round, then randomly deal them back to each player, starting with the winner of the round. (Players retain any neutral cards that were still in their deck at the end of the round).
+
+If a round ends in a stalemate, the winner is whoever has the most visible rows of 3 cards (or, in a two-player game, most visible rows of 4 cards).
+
+If there is still a stalemate, whoever placed the row of 3 cards (or, in a two-player game, the row of 4 cards ) showing the fewest points wins.
+
+
+End of the Game
+
+The first player to win 2 rounds wins the game.
+Team Variant (for 4 Players)
+
+Team members sit across from one another, so each turn alternates teams and players.
+
+Similar to a two-player game, each team will receive all cards of 2 colors and shuffle them together in a stack, face-down.
+
+Each team member receives half of the shared stack.
+
+Object of the Game
+
+The First Team To Score 5 Cards Of The Same Color In A Row.
+
 
 ## SETUP
 
-### Clone the Repo
+### Clone the repository with Git
 
 ```shell
 git clone --recurse-submodules git@github.com:Ornsolot/Punto.git
 ```
 
-### Install dependencies
+### Use the Wizard to install all the dependencies
 
-Use this commande at the root of the project to install all the libraries and tool necessary to deploy, compile and use the project.
+To use the Wizard, use the following command at the root of the project to install all the libraries and tools necessary to deploy, compile and use the project:
+
+- **Git:** .
+- **lsb-release:** Shell command that displays information about Linux system's version and distribution.
+- **net-tools:** .
+- **build-essential:** .
+- **libcsfml-dev:** C Multimedia library (technically a binding of a C++ library).
+- **libmongoc-dev:** C library to do MongoDB querries.
+- **libsqlite3-dev:** C library to do SQLite querries.
+- **libmysqlclient-dev:** C library to do MySQL querries.
+- **Docker:** Tools used to conteneurise the databases.
+- **sqlite3:** The only Database that i couldn't conteneurise...
 
 ```shell
 sudo ./wizard.sh $(whoami)
 ```
 
-### Complie and deploy the docker's containers
+### Compile Game and deploy the containers
 
-Use this commande at the root of the project to deploy the docker's containers (mysql and mongo) and compile the punto game.
+Use this command at the root of the project to deploy the containers (mysql, mongo and Neo4J) and compile the Punto game.
 
 ```shell
 make all
@@ -49,7 +130,7 @@ sqlite3 data/db/punto.db < data/db/sqlite.sql
 ```shell
 $Database = sqlite, mysql, mongodb
 $Player = 2 or 4
-$Cycle = 1 to 2,147,483,647 (MAX_32_INT)
+$Cycle = 1 to 2,147,483,647 (MAX_64 _INT)
 ```
 
 ## Launch the game
