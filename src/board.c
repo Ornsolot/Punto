@@ -2,11 +2,11 @@
 
 /**
  * \brief   Convert an integer into a string.
+ * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
+ *
  * \param   nbr The number to convert into a string.
  * \param   str The string that will be filled with the number.
  * \return  The string containing the number.
- *
- * \warning OBSCURE ARCANE OF BLACK WIZARDRY COMPUTER MAGIC.
  */
 static char *utoa(size_t nbr, char *str)
 {
@@ -18,6 +18,7 @@ static char *utoa(size_t nbr, char *str)
 
 /**
  * \brief   Create an Card_t Object.
+ *
  * \param   font   The font of the number on the card.
  * \param   number The number on the card.
  * \param   color  The color of the card (number and outline).
@@ -50,6 +51,7 @@ Card_t *setPuntoCard(Font_t *font, unsigned short number, sfColor color, v2f_t c
 
 /**
  * \brief   Create an matix of pointer to Card_t Object.
+ *
  * \param   font The font of the board's card.
  * \param   size The number of row & col of the matrix.
  * \return  An matrix of pointer to Card_t Object.
@@ -70,6 +72,7 @@ Card_t ***setPuntoCardBoard(Font_t *font, size_t size)
 
 /**
  * \brief   Draw a Card_t Object.
+ *
  * \param   frame The window to draw into.
  * \param   card  The card to draw.
  */
@@ -83,6 +86,7 @@ void printPuntoCard(Window_t *frame, Card_t *card)
 
 /**
  * \brief   Draw an matix of pointer to Card_t Object.
+ *
  * \param   frame The window to draw into.
  * \param   board The board (matrix of pointer to Card_t Object) to draw.
  * \param   size The number of row & col of the matrix.
@@ -98,6 +102,7 @@ void printPuntoCardBoard(Window_t *frame, Card_t ***board, size_t size)
 
 /**
  * \brief   Free the memory allocated to an Card_t Object.
+ *
  * \param   card The Card_t Object to free.
  */
 void unsetPuntoCard(Card_t *card)
@@ -111,6 +116,7 @@ void unsetPuntoCard(Card_t *card)
 
 /**
  * \brief   Free the memory allocated to an matix of pointer to Card_t Object.
+ *
  * \param   board The board (matrix of pointer to Card_t Object) to free.
  * \param   size  The number of row & col of the matrix.
  */
