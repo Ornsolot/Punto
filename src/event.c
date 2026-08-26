@@ -2,39 +2,41 @@
 
 /**
  * \brief   Convert a color to a string.
- * \param   color the color to write.
+ *
+ * \param   color The color to convert into a string.
  * \return  A string with the name of the color or NULL.
  */
 static char *colorToString(sfColor color)
 {
+    char *str = null;
     switch(sfColor_toInteger(color)) {
         case INT_TRANSPARENT:
-            return ("Invisible");
+            str = "Invisible";
         case INT_MAGENTA:
-            return ("Magenta");
+            str = "Magenta";
         case INT_YELLOW:
-            return ("Yellow");
+            str = "Yellow";
         case INT_BLACK:
-            return ("Black");
+            str = "Black";
         case INT_WHITE:
-            return ("White");
+            str = "White";
         case INT_GREEN:
-            return ("Green");
+            str = "Green";
         case INT_BLUE:
-            return ("Blue");
+            str = "Blue";
         case INT_CYAN:
-            return ("Cyan");
+            str = "Cyan";
         case INT_RED:
-            return ("Red");
-        default:
-            return (NULL);
+            str = "Red";
+        return (str);
     }
 }
 
 /**
  * \brief   Find the biggest tuple of a column.
- * \param   game the game to monitor.
- * \param   click the coordinate of the click.
+ *
+ * \param   game  The game to monitor.
+ * \param   click The coordinate of the click.
  */
 static void checkScoreCol(Punto_t *game, v2i_t click)
 {
@@ -56,8 +58,9 @@ static void checkScoreCol(Punto_t *game, v2i_t click)
 
 /**
  * \brief   Find the biggest tuple of a row.
- * \param   game the game to monitor.
- * \param   click the coordinate of the click.
+ *
+ * \param   game  The game to monitor.
+ * \param   click The coordinate of the click.
  */
 static void checkScoreRow(Punto_t *game, v2i_t click)
 {
