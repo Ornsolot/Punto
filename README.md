@@ -2,7 +2,7 @@
 
 ## Summary of the project
 This is a Punto Game made in C with OCML (based itself on OCL & SFML) libraries, it work as is on Debian based GNU/Linux distro (even WSL).
-You can use it on Windows or Mac (using Brew) but i'm unsure of the steps to follow to set it up correctly.
+You can use it on Windows or Mac (using Brew) but i am unsure of the steps to follow to set it up correctly.
 
 ## TODO List (Future Plan)
 + Code Rework / Refactoring:
@@ -91,9 +91,9 @@ Non-exhaustive list of dependencies:
 - **lsb-release:** Shell command that displays information about Linux system's version and distribution.
 - **build-essential:** The build-essential meta-package groups together the essential tools for compiling and building software from source code on Debian, tools like **gcc** or **GNU/Make**.
 - **libcsfml-dev:** C Multimedia library (technically a binding of a C++ library).
-- **libmongoc-dev:** C library to do MongoDB querries.
-- **libsqlite3-dev:** C library to do SQLite querries.
-- **libmysqlclient-dev:** C library to do MySQL querries.
+- **libmongoc-dev:** C library to do MongoDB queries.
+- **libsqlite3-dev:** C library to do SQLite queries.
+- **libmysqlclient-dev:** C library to do MySQL queries.
 - **Docker:** Tools used to conteneurise the databases.
 - **sqlite3:** The only Database that i couldn't conteneurise...
 
@@ -108,7 +108,7 @@ make all
 make Punto db
 ```
 
-#### Make sqlite3 databse
+#### Make sqlite3 database
 To create the SQLite database use this command at the root of the project.
 ```shell
 sqlite3 data/db/punto.db < data/db/sqlite.sql
