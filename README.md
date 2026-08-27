@@ -30,18 +30,18 @@ Sort the deck into 4 stacks: 1 of each color. Each player takes the following ca
 - 4 players: Each player takes 1 set of color cards.
 Shuffle all of your cards together and stack them face-down in front of you
 
-<img src="doc/src/img/GamePlay.jpg" alt="" width="900"/>
+<img src="doc/src/img/GamePlay.jpg" alt="" width="1000"/>
 
 ### Game Play
 The first player starts and reveals their top card, placing it in the middle of the play area. Play proceeds left. On each subsequent turn, you reveal your top card and must place it next to or on top of a card already in play.
 
 **Place next to a card:** Cards may be placed side-to-side or corner-to-corner.
 
-<img src="doc/src/img/CardNext.jpg" alt="" width="300"/>
+<img src="doc/src/img/CardNext.jpg" alt="" width="400"/>
 
 **Place on top of a card:** You may only place a card on top of one with fewer points.
 
-<img src="doc/src/img/CardTop.jpg" alt="" width="300"/>
+<img src="doc/src/img/CardTop.jpg" alt="" width="400"/>
 
 **Important:** The playing area has a maximum size of 6x6. Choose wisely where to place your cards !
 
@@ -50,7 +50,7 @@ As soon as you've placed 4 (3-4 player) or 5 (2 player) cards of the same color 
 Take the card with the most points from your winning row and remove it from the game. The remaining cards are all returned to their respective players and shuffled.
 After that a new round begins, starting with the player to the left of the previous round s winner.
 
-<img src="doc/src/img/EndingRoom.jpg" alt="" width="900"/>
+<img src="doc/src/img/EndingRound.jpg" alt="" width="1000"/>
 
 ### Notes for 3 Players
 The neutral color does not count towards a victory.
@@ -61,6 +61,9 @@ If there is still a stalemate, whoever placed the row of 3 cards (or, in a two-p
 
 ## End of the Game
 The first player to win 2 rounds wins the game.
+
+<img src="doc/src/img/EndGame.jpg" alt="" width="1000"/>
+
 
 ### Team Variant (for 4 Players)
 Team members sit across from one another, so each turn alternates teams and players.
@@ -83,10 +86,10 @@ To use the Wizard, use the following command at the root of the project to insta
 ```shell
 ./wizard.sh $(whoami)
 ```
-List
-- **Git:** .
+Non-exhaustive list of dependencies:
+- **Git:** Decentralized version control software.
 - **lsb-release:** Shell command that displays information about Linux system's version and distribution.
-- **build-essential:** .
+- **build-essential:** The build-essential meta-package groups together the essential tools for compiling and building software from source code on Debian, tools like **gcc** or **GNU/Make**.
 - **libcsfml-dev:** C Multimedia library (technically a binding of a C++ library).
 - **libmongoc-dev:** C library to do MongoDB querries.
 - **libsqlite3-dev:** C library to do SQLite querries.
@@ -95,23 +98,18 @@ List
 - **sqlite3:** The only Database that i couldn't conteneurise...
 
 ### Compile Game and deploy the containers
-
-Use this command at the root of the project to deploy the containers (mysql, mongo and Neo4J) and compile the Punto game.
+Use this command at the root of the project to deploy the containers mysql, mongo and Neo4J (SQLite is lower) and compile the game executable.
 
 ```shell
 make all
 ```
-
-or
-
+**Or:**
 ```shell
 make Punto db
 ```
 
-### Make sqlite3 databse
-
-To create the sqlite database use this command at the root of the project.
-
+#### Make sqlite3 databse
+To create the SQLite database use this command at the root of the project.
 ```shell
 sqlite3 data/db/punto.db < data/db/sqlite.sql
 ```
@@ -119,44 +117,36 @@ sqlite3 data/db/punto.db < data/db/sqlite.sql
 ## How to use
 
 ### KEYWORDS
-
+List of parameters to give the executable:
 ```shell
-$Database = sqlite, mysql, mongodb
+$Database = sqlite | mysql | mongodb | neo4j
 $Player = 2 or 4
 $Cycle = 1 to 2,147,483,647 (MAX_64 _INT)
 ```
 
-## Launch the game
-
+### Launch the game
 Use this command at the root of the project to launch the game.
-
 ```shell
 ./Punto.exe play $Database $Player
 ./Punto.exe sqlite 2
 ```
 
-## Print the Score Board
-
+### Print the Score Board
 Use this command at the root of the project to print the Score board.
-
 ```shell
 ./Punto.exe score $Database
 ./Punto.exe score sqlite
 ```
 
-## Launch the autofill
-
-Use this command at the root of the project to launch the game.
-
+### Launch the auto-fill
+Use this command at the root of the project to launch the auto-fill.
 ```shell
 ./Punto.exe auto $Database $Player $Cycle
 ./Punto.exe auto sqlite 2 2
 ```
 
-## Launch the database migration
-
+### Launch the database migration
 Use this command at the root of the project to launch migration from a database to another.
-
 ```shell
 ./Punto.exe migrate $Database $Database
 ./Punto.exe migrate sqlite mysql
