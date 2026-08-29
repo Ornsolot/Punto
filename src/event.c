@@ -8,27 +8,17 @@
  */
 static char *colorToString(sfColor color)
 {
-    char *str = null;
     switch(sfColor_toInteger(color)) {
-        case INT_TRANSPARENT:
-            str = "Invisible";
-        case INT_MAGENTA:
-            str = "Magenta";
-        case INT_YELLOW:
-            str = "Yellow";
-        case INT_BLACK:
-            str = "Black";
-        case INT_WHITE:
-            str = "White";
-        case INT_GREEN:
-            str = "Green";
-        case INT_BLUE:
-            str = "Blue";
-        case INT_CYAN:
-            str = "Cyan";
-        case INT_RED:
-            str = "Red";
-        return (str);
+        case INT_TRANSPARENT: return ("Invisible");
+        case INT_MAGENTA: return ("Magenta");
+        case INT_YELLOW: return ("Yellow");
+        case INT_BLACK: return ("Black");
+        case INT_WHITE: return ("White");
+        case INT_GREEN: return ("Green");
+        case INT_BLUE: return ("Blue");
+        case INT_CYAN: return ("Cyan");
+        case INT_RED: return ("Red");
+        default: return ("ERROR: Undefined Color");
     }
 }
 
